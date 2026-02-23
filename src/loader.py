@@ -1,6 +1,16 @@
 """
 Загрузчик данных для Healthcare Dataset
+ИЗМЕНЕНО: объединены изменения из dev и feature/data-loader (Kaggle API)
+"""
+import pandas as pd
+Загрузчик данных для Healthcare Dataset
+<<<<<<< HEAD
 ИЗМЕНЕНО В ВЕТКЕ DEV: источник данных изменён на Kaggle API
+=======
+ИЗМЕНЕНО В ВЕТКЕ FEATURE/DATA-LOADER: загрузка из Kaggle API
+""""""
+Загрузчик данных для Healthcare Dataset
+>>>>>>> feature/data-loader
 """
 import pandas as pd
 
