@@ -1,5 +1,6 @@
 """
 Загрузчик данных для Healthcare Dataset
+ИЗМЕНЕНО В ВЕТКЕ DEV: источник данных изменён на Kaggle API
 """
 import pandas as pd
 
@@ -22,4 +23,3 @@ if __name__ == "__main__":
         print(f"\nСтатистика:")
         print(f"Пациентов: {len(df)}")
         print(f"Заболевания: {df['Medical Condition'].value_counts().to_dict()}")
-EOF
