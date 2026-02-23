@@ -1,5 +1,8 @@
 """
 Загрузчик данных для Healthcare Dataset
+ИЗМЕНЕНО В ВЕТКЕ FEATURE/DATA-LOADER: загрузка из Kaggle API
+""""""
+Загрузчик данных для Healthcare Dataset
 """
 import pandas as pd
 
