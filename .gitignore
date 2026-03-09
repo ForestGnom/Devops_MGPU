@@ -1,0 +1,62 @@
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python temporary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.virtualenvs/
+
+# Data files
+*.csv
+*.xlsx
+*.xls
+*.xlsm
+*.json
+*.jsonl
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.pickle
+*.pkl
+*.joblib
+*.arrow
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.cache
+
+# Model files
+*.model
+*.pt
+*.pth
+*.weights
+.huggingface/
