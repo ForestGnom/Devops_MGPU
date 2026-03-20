@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: Opaque
+data:
+  POSTGRES_USER: aGVhbHRoY2FyZV91c2Vy
+  POSTGRES_PASSWORD: aGVhbHRoY2FyZV9wYXNzd29yZA==
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  POSTGRES_DB: "healthcare"
+  DB_HOST: "db-service"
+  DB_PORT: "5432"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
