@@ -1,0 +1,83 @@
+pipeline {
+    agent any
+    
+    environment {
+        IMAGE_NAME = "healthcare-etl"
+        BUILD_NUMBER = "${BUILD_NUMBER}"
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                echo "Checking out code from Git repository..."
+                checkout scm
+            }
+        }
+        
+        stage('Lint') {
+            steps {
+                echo "Running Python linter (pylint)..."
+                sh '''
+                    pip install pylint
+                    pylint etl.py --fail-under=5.0 || echo "Linter warnings found, but continuing..."
+                '''
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                echo "Building Docker image: ${IMAGE_NAME}:${BUILD_NUMBER}"
+                sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
+            }
+        }
+        
+        stage('Smoke Test (Health Check)') {
+            steps {
+                echo "Running container and performing health check..."
+                sh '''
+                    # Запускаем контейнер в фоне
+                    docker run -d --name health-test -p 8080:8080 ${IMAGE_NAME}:${BUILD_NUMBER}
+                    
+                    # Ждем запуска сервера
+                    echo "Waiting for service to start..."
+                    sleep 5
+                    
+                    # Проверяем health endpoint (вариант 30 - smoke test)
+                    echo "Checking /health endpoint..."
+                    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/health)
+                    
+                    if [ "$RESPONSE" = "200" ]; then
+                        echo "✓ Smoke test passed! HTTP status: $RESPONSE"
+                        echo "✓ Container is healthy"
+                    else
+                        echo "✗ Smoke test failed! HTTP status: $RESPONSE"
+                        echo "Container logs:"
+                        docker logs health-test
+                        exit 1
+                    fi
+                '''
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo "Cleaning up resources..."
+            sh '''
+                docker stop health-test || true
+                docker rm health-test || true
+                docker rmi ${IMAGE_NAME}:${BUILD_NUMBER} || true
+                docker system prune -f || true
+                echo "Cleanup completed!"
+            '''
+        }
+        
+        success {
+            echo "Pipeline completed successfully!"
+        }
+        
+        failure {
+            echo "Pipeline failed! Check logs for details."
+        }
+    }
+}
